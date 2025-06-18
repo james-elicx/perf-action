@@ -2,7 +2,6 @@
 
 [![Build](https://github.com/blacha/hyperfine-action/actions/workflows/build.yml/badge.svg)](https://github.com/blacha/hyperfine-action/actions/workflows/build.yml)
 
-
 Runs [Hyperfine](https://github.com/sharkdp/hyperfine) as a github action and stores the result as a Github page.
 
 Example Repo [Actions](https://github.com/blacha/hyperfine-action-test/actions)
@@ -10,7 +9,6 @@ Example Repo [Actions](https://github.com/blacha/hyperfine-action-test/actions)
 Example output [Benchmarks](https://blacha.github.io/hyperfine-action-test/benchmarks.html)
 
 ![BenchmarksChart](./ExampleChart.png)
-
 
 Inspired by the [Denoland](https://github.com/denoland/deno) benchmark [suite](https://deno.land/benchmarks)
 
@@ -20,14 +18,15 @@ Create a `.hyperfine.json`
 
 ```json
 [
-  { "name": "sleep", "command": "sleep 0.1" },
-  { "name": "node", "command": "node -e 'console.log()'" }
+	{ "name": "sleep", "command": "sleep 0.1" },
+	{ "name": "node", "command": "node -e 'console.log()'" }
 ]
 ```
 
 Add the action to your github action
+
 ```yaml
-    - uses: blacha/hyperfine-action@v1
+- uses: blacha/hyperfine-action@v1
 ```
 
 output

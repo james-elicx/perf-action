@@ -1,0 +1,21 @@
+{
+	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/eslintrc.json",
+	"extends": ["ixn"],
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"rules": {
+		"no-console": "error",
+		"@typescript-eslint/no-non-null-assertion": "warn",
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"": "never",
+				"ts": "never"
+			}
+		],
+		"class-methods-use-this": "off"
+	},
+	"ignorePatterns": ["dist/*"]
+}

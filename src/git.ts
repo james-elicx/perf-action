@@ -6,68 +6,69 @@ import * as github from '@actions/github';
 const RemoteName = 'hyperfine-action-remote';
 
 export class Git {
-  token: string;
+	token: string;
 
-  constructor(token: string) {
-    this.token = token;
-  }
+	constructor(token: string) {
+		this.token = token;
+	}
 
-  private git(...args: string[]): string {
-    core.debug('git :' + JSON.stringify(args));
-    return execFileSync('git', args).toString().trim();
-  }
+	private git(...args: string[]): string {
+		core.debug(`git :${JSON.stringify(args)}`);
+		return execFileSync('git', args).toString().trim();
+	}
 
-  init(): void {
-    try {
-      this.git('remote', 'remove', RemoteName);
-    } catch (e) {
-      // ignore if remote doesn't exist
-    }
-    this.git('remote', 'add', RemoteName, this.url);
-    this.git('config', '--global', 'user.name', this.actor);
-    this.git('config', '--global', 'user.email', this.email);
-  }
+	init(): void {
+		try {
+			this.git('remote', 'remove', RemoteName);
+		} catch (e) {
+			// ignore if remote doesn't exist
+		}
+		this.git('remote', 'add', RemoteName, this.url);
+		this.git('config', '--global', 'user.name', this.actor);
+		this.git('config', '--global', 'user.email', this.email);
+	}
 
-  get url(): string {
-    return `https://x-access-token:${this.token}@github.com/${this.owner}/${this.repo}`;
-  }
+	get url(): string {
+		return `https://x-access-token:${this.token}@github.com/${this.owner}/${this.repo}`;
+	}
 
-  get actor(): string {
-    return 'hyperfine-action[bot]';
-  }
+	get actor(): string {
+		return 'hyperfine-action[bot]';
+	}
 
-  get owner(): string {
-    return github.context.repo.owner;
-  }
-  get repo(): string {
-    return github.context.repo.repo;
-  }
+	get owner(): string {
+		return github.context.repo.owner;
+	}
 
-  get email(): string {
-    return `${this.actor}@users.noreply.github.com`;
-  }
+	get repo(): string {
+		return github.context.repo.repo;
+	}
 
-  get hash(): string {
-    return this.git('rev-parse', 'HEAD');
-  }
+	get email(): string {
+		return `${this.actor}@users.noreply.github.com`;
+	}
 
-  fetch(): void {
-    this.git('fetch', RemoteName);
-  }
+	get hash(): string {
+		return this.git('rev-parse', 'HEAD');
+	}
 
-  checkout(branchName: string): void {
-    this.git('checkout', `${RemoteName}/${branchName}`);
-  }
+	fetch(): void {
+		this.git('fetch', RemoteName);
+	}
 
-  add(...files: string[]): void {
-    this.git('add', ...files);
-  }
+	checkout(branchName: string): void {
+		this.git('checkout', `${RemoteName}/${branchName}`);
+	}
 
-  commit(message: string): void {
-    this.git('commit', '-m', message);
-  }
+	add(...files: string[]): void {
+		this.git('add', ...files);
+	}
 
-  push(branchName: string): void {
-    this.git('push', RemoteName, `HEAD:${branchName}`);
-  }
+	commit(message: string): void {
+		this.git('commit', '-m', message);
+	}
+
+	push(branchName: string): void {
+		this.git('push', RemoteName, `HEAD:${branchName}`);
+	}
 }

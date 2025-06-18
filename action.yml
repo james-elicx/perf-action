@@ -1,29 +1,35 @@
-name: hyperfine benchmarking
-description: "Runs hyperfine benchmarking across provided input files"
-author: "Blayne Chard <blayne@chard.com>"
+name: perf benchmarking
+description: Runs perf benchmarking across provided input files
+author: James <james@eli.cx>
 inputs:
   benchmark-config:
-    description: Benchmark file
-    default: ".hyperfine.json"
-  benchmark-output:
-    description: Benchmark file
-    default: "benchmarks.json"
-  benchmark-html:
-    description: Benchmark file
-    default: "benchmarks.html"
+    description: Benchmark config
+    required: false
+    default: .perf.json
+  benchmark-output-json:
+    description: Benchmark output JSON
+    required: false
+    default: benchmarks.json
+  benchmark-output-html:
+    description: Benchmark output HTML
+    required: false
+    default: benchmarks.html
   count:
     description: Number of past runs to keep (`0` keeps everything)
-    default: "500"
-  benchmark-branch:
-    description: "Branch to use for benchmarks"
     required: false
-    default: "gh-pages"
-  github-token:
-    description: Token to use to add comments to pull requests
-    default: ${{ github.token }}
-  master-branch:
+    default: 500'
+  benchmark-branch:
+    description: Branch to store benchmarks on
+    required: false
+    default: gh-pages
+  main-branch:
     description: Branch to use as a base for benchmarks
-    default: "master"
+    required: false
+    default: main
+  binary:
+    description: perf binary to use
+    required: false
+    default: perf-0.6.0-x86-linux
 runs:
-  using: "node20"
-  main: "dist/index.cjs"
+  using: node20
+  main: dist/index.js
