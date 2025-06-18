@@ -1,7 +1,37 @@
 {
-  "extends": "@linzjs/style/tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["ES2022"],
-    "noEmit": true
-  }
+	"$schema": "https://json.schemastore.org/tsconfig.json",
+	"extends": "@tsconfig/strictest/tsconfig.json",
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"allowJs": true,
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": false,
+		"verbatimModuleSyntax": false,
+		"outDir": "dist",
+		"rootDirs": ["src"],
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false,
+
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["dist", "node_modules"]
 }

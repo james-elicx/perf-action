@@ -1,5 +1,5 @@
-import { runHyperfine } from './hyperfine/hyperfine.run.js';
+import * as core from '@actions/core';
 
-export const Hyperfine = {
-  run: runHyperfine,
-};
+import { benchmark } from './benchmark';
+
+benchmark().catch((e: Error) => core.setFailed(e.message));

@@ -1,0 +1,59 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  automated-fixes:
+    name: Automated fixes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install deps
+        run: bun install
+
+      - name: Format files
+        run: bun run format:fix
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: '`bun run format:fix`'
+
+  checks:
+    name: Run ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [lint, tsc, build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install deps
+        run: bun install
+
+      - name: ${{ matrix.name }}
+        run: bun run ${{ matrix.name }}
+
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Run benchmark
+        run: bun dist/index.js

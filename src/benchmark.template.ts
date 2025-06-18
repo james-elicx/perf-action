@@ -1,4 +1,4 @@
-export const BenchmarkHtml = `<html>
+export const benchmarkHtml = (opts: { output: { json: string } }) => `<html>
 
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@toast-ui/chart@4.3.6/dist/toastui-chart.css"
@@ -20,12 +20,12 @@ export const BenchmarkHtml = `<html>
       const series = [];
 
 
-      const res = await fetch('./benchmarks.json').then(c => c.json());
+      const res = await fetch('./${opts.output.json}').then(c => c.json());
       const benchmarks = res.reverse();
 
       const allSeries = new Set();
       for (const bench of benchmarks) {
-        categories.push(bench.createdAt.slice(0, 10) + ' - ' + bench.hash.slice(0, 8));
+        categories.push(bench.timestamp.slice(0, 10) + ' - ' + bench.hash.slice(0, 8));
 
         for (const r of bench.results) allSeries.add(r.name);
       }
@@ -35,16 +35,16 @@ export const BenchmarkHtml = `<html>
         const ser = { name, data: [] };
         series.push(ser)
         for (const bench of benchmarks) {
-          if (lastEvent == null || bench.createdAt > lastEvent.date) lastEvent = bench;
+          if (lastEvent == null || bench.timestamp > lastEvent.date) lastEvent = bench;
           const result = bench.results.find(f => f.name === name);
 
           if (result == null) ser.data.push(undefined)
-          else ser.data.push(result.mean)
+          else ser.data.push(result.measurements.wall_time.mean / 1_000_000)
         }
       }
 
       const options = {
-        chart: { title: 'Benchmark results - ' + lastEvent.createdAt.slice(0, 10), width: 1000, height: 500 },
+        chart: { title: 'Benchmark results - ' + lastEvent.timestamp.slice(0, 10), width: 1000, height: 500 },
         legend: {
           align: 'bottom',
         },
