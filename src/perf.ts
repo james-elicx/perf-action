@@ -45,16 +45,17 @@ const findPerf = (binary: string) => {
 
 export const perf = async (
 	cmd: string,
-	opts: { binary?: string; duration?: number; warmups?: number; allowFailures?: boolean },
+	opts: { binary?: string; duration?: number; warmup?: boolean; allowFailures?: boolean },
 ) => {
 	const outputFile = `./${randomBytes(10).toString('hex')}.json`;
 
 	execSync(
 		[
+			'sudo',
 			findPerf(opts.binary ?? 'perf-0.6.0-x86-linux'),
 			`--export-json ${outputFile}`,
 			opts.duration && `--duration ${opts.duration}`,
-			opts.warmups && `--warmup ${opts.warmups}`,
+			opts.warmup && '--warmup',
 			`'${cmd}'`,
 		]
 			.filter(Boolean)

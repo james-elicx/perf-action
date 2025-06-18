@@ -13,7 +13,7 @@ export type RawConfig = {
 	binary: `perf-0.6.0-${string}`;
 	baseline?: string;
 	config: {
-		warmups?: number;
+		warmup?: boolean;
 		duration?: number;
 		allowFailures?: boolean;
 		commands: { name: string; command: string }[];
@@ -37,7 +37,7 @@ export type Result = {
 	command: string;
 
 	iterations: number;
-	warmups: number;
+	warmup: boolean;
 
 	measurements: PerfMeasurements;
 };
@@ -52,7 +52,7 @@ const getConfig = async (): Promise<Config & { git: Git }> => {
 	const workspace = process.env.GITHUB_WORKSPACE;
 	if (!workspace) throw new Error(`Failed to read workspace "$GITHUB_WORKSPACE"`);
 
-	const configPath = join(workspace, core.getInput('config'));
+	const configPath = join(workspace, core.getInput('config') || '.perf.json');
 	if (!existsSync(configPath)) throw new Error(`Config file ${configPath} not found`);
 
 	const rawConfig: RawConfig = JSON.parse(readFileSync(configPath, 'utf-8'));
@@ -62,7 +62,7 @@ const getConfig = async (): Promise<Config & { git: Git }> => {
 		binary: rawConfig.binary,
 		baseline: rawConfig.baseline ?? 'main',
 		config: {
-			warmups: rawConfig.config.warmups ?? 0,
+			warmup: !!rawConfig.config.warmup,
 			duration: rawConfig.config.duration ?? 5000,
 			allowFailures: !!rawConfig.config.allowFailures,
 			commands: rawConfig.config.commands,
@@ -109,7 +109,7 @@ const run = async () => {
 			command,
 
 			iterations: res.sample_count,
-			warmups: config.warmups,
+			warmup: config.warmup,
 
 			measurements: res.measurements,
 		});

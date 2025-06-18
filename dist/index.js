@@ -23892,10 +23892,11 @@ var perf = async (cmd, opts) => {
 	const outputFile = `./${randomBytes(10).toString('hex')}.json`;
 	execSync(
 		[
+			'sudo',
 			findPerf(opts.binary ?? 'perf-0.6.0-x86-linux'),
 			`--export-json ${outputFile}`,
 			opts.duration && `--duration ${opts.duration}`,
-			opts.warmups && `--warmup ${opts.warmups}`,
+			opts.warmup && '--warmup',
 			`'${cmd}'`,
 		]
 			.filter(Boolean)
@@ -23914,7 +23915,7 @@ var perf = async (cmd, opts) => {
 var getConfig = async () => {
 	const workspace = process.env.GITHUB_WORKSPACE;
 	if (!workspace) throw new Error(`Failed to read workspace "$GITHUB_WORKSPACE"`);
-	const configPath = join2(workspace, core2.getInput('config'));
+	const configPath = join2(workspace, core2.getInput('config') || '.perf.json');
 	if (!existsSync2(configPath)) throw new Error(`Config file ${configPath} not found`);
 	const rawConfig = JSON.parse(readFileSync2(configPath, 'utf-8'));
 	return {
@@ -23922,7 +23923,7 @@ var getConfig = async () => {
 		binary: rawConfig.binary,
 		baseline: rawConfig.baseline ?? 'main',
 		config: {
-			warmups: rawConfig.config.warmups ?? 0,
+			warmup: !!rawConfig.config.warmup,
 			duration: rawConfig.config.duration ?? 5000,
 			allowFailures: !!rawConfig.config.allowFailures,
 			commands: rawConfig.config.commands,
@@ -23957,7 +23958,7 @@ var run = async () => {
 			name,
 			command,
 			iterations: res.sample_count,
-			warmups: config.warmups,
+			warmup: config.warmup,
 			measurements: res.measurements,
 		});
 	}

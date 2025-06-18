@@ -1,5 +1,5 @@
 {
-	"binary": "perf-0.6.0-aarch64-macos",
+	"binary": "temp",
 	"baseline": "main",
 	"config": {
 		"warmups": 3,
