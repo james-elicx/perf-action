@@ -1,35 +1,11 @@
 name: perf benchmarking
-description: Runs perf benchmarking across provided input files
+description: Runs perf benchmarking across provided commands
 author: James <james@eli.cx>
 inputs:
-  benchmark-config:
+  config:
     description: Benchmark config
     required: false
     default: .perf.json
-  benchmark-output-json:
-    description: Benchmark output JSON
-    required: false
-    default: benchmarks.json
-  benchmark-output-html:
-    description: Benchmark output HTML
-    required: false
-    default: benchmarks.html
-  count:
-    description: Number of past runs to keep (`0` keeps everything)
-    required: false
-    default: 500'
-  benchmark-branch:
-    description: Branch to store benchmarks on
-    required: false
-    default: gh-pages
-  main-branch:
-    description: Branch to use as a base for benchmarks
-    required: false
-    default: main
-  binary:
-    description: perf binary to use
-    required: false
-    default: perf-0.6.0-x86-linux
 runs:
   using: node20
   main: dist/index.js

@@ -1,0 +1,16 @@
+{
+	"binary": "perf-0.6.0-aarch64-macos",
+	"baseline": "main",
+	"config": {
+		"warmups": 3,
+		"duration": 5,
+		"allowFailures": true,
+		"commands": [{ "name": "sleep", "command": "sleep 0.1" }]
+	},
+	"output": {
+		"branch": "gh-pages",
+		"json": "benchmarks.json",
+		"html": "benchmarks.html",
+		"limit": -1
+	}
+}

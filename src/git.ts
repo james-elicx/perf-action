@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-const RemoteName = 'hyperfine-action-remote';
+const RemoteName = 'perf-action-remote';
 
 export class Git {
 	token: string;
